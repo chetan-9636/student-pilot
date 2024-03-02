@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Details Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        form {
+            max-width: 400px;
+            margin: auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .checkbox-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .checkbox-item {
+            flex-basis: 48%;
+            margin-bottom: 10px;
+        }
+        .radio-list {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Page 1: Login -->
+    <form id="loginForm" onsubmit="return openStudentDetails()">
+        <h2>Login</h2>
+        <label for="loginId">Login ID:</label>
+        <input type="text" id="loginId" name="loginId" required>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <!-- Page 2: Student Details -->
+    <form id="studentDetailsForm" style="display: none;" onsubmit="return openStatusPage()">
+        <h2>Student Details</h2>
+        <label for="studentName">Student Name:</label>
+        <input type="text" id="studentName" name="studentName" required>
+
+        <label for="contactNumber">Contact Number:</label>
+        <input type="text" id="contactNumber" name="contactNumber" required>
+
+        <label for="email">Email ID:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="education">Education Qualification:</label>
+        <input type="text" id="education" name="education" required>
+
+        <label for="age">Age:</label>
+        <input type="text" id="age" name="age" required>
+
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location" required>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <!-- Page 3: Status -->
+    <form id="statusForm" style="display: none;" onsubmit="return openRemarksComments()">
+        <h2>Status</h2>
+        <label>Are you interested?</label>
+        <ul class="radio-list">
+            <li><input type="radio" name="areYouInterested" value="yes"> Yes</li>
+            <li><input type="radio" name="areYouInterested" value="no"> No</li>
+        </ul>
+
+        <label>Prospect?</label>
+        <ul class="radio-list">
+            <li><input type="radio" name="prospect" value="yes"> Yes</li>
+            <li><input type="radio" name="prospect" value="no"> No</li>
+        </ul>
+
+        <label>Future Prospect?</label>
+        <ul class="radio-list">
+            <li><input type="radio" name="futureProspect" value="yes"> Yes</li>
+            <li><input type="radio" name="futureProspect" value="no"> No</li>
+        </ul>
+
+        <label>Not Answering?</label>
+        <ul class="radio-list">
+            <li><input type="radio" name="notAnswering" value="yes" onclick="showNotAnsweringDetails()"> Yes</li>
+            <li><input type="radio" name="notAnswering" value="no"> No</li>
+        </ul>
+
+        <div id="notAnsweringDetails" style="display: none;">
+            <ul class="checkbox-list">
+                <li class="checkbox-item"><input type="checkbox" id="feeConcern" name="feeConcern"><label for="feeConcern">Fee Concern</label></li>
+                <li class="checkbox-item"><input type="checkbox" id="parentsObligation" name="parentsObligation"><label for="parentsObligation">Parents Obligation</label></li>
+                <li class="checkbox-item"><input type="checkbox" id="notInterested" name="notInterested"><label for="notInterested">Not Interested</label></li>
+                <li class="checkbox-item"><input type="checkbox" id="switchedOff" name="switchedOff"><label for="switchedOff">Switched Off</label></li>
+                <li class="checkbox-item"><input type="checkbox" id="notConnecting" name="notConnecting"><label for="notConnecting">Not Connecting</label></li>
+                <li class="checkbox-item"><input type="checkbox" id="notReachable" name="notReachable"><label for="notReachable">Not Reachable</label></li>
+                <li class="checkbox-item"><input type="checkbox" id="languageProblem" name="languageProblem"><label for="languageProblem">Language Problem</label></li>
+            </ul>
+        </div>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <!-- Page 4: Remarks, Comments, Follow Up -->
+    <form id="remarksForm" style="display: none;" onsubmit="return generateLink()">
+        <h2>Remarks, Comments, Follow Up</h2>
+        <label for="remarks">Remarks:</label>
+        <textarea id="remarks" name="remarks" required></textarea>
+
+        <label for="comments">Comments:</label>
+        <textarea id="comments" name="comments" required></textarea>
+
+        <label for="followUp">Follow-up:</label>
+        <input type="text" id="followUp" name="followUp" required>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <!-- Page 5: Display Link -->
+    <div id="link" style="display: none;">
+        <h2>Generated Link</h2>
+        <p id="generatedLink"></p>
+        <!-- In a real-world scenario, you would handle data storage and retrieval here -->
+    </div>
+
+    <script>
+        function openStudentDetails() {
+            document.getElementById("loginForm").style.display = "none";
+            document.getElementById("studentDetailsForm").style.display = "block";
+            return false; // Prevent form submission
+        }
+
+        function openStatusPage() {
+            document.getElementById("studentDetailsForm").style.display = "none";
+            document.getElementById("statusForm").style.display = "block";
+            return false; // Prevent form submission
+        }
+
+        function openRemarksComments() {
+            document.getElementById("statusForm").style.display = "none";
+            document.getElementById("remarksForm").style.display = "block";
+            return false; // Prevent form submission
+        }
+
+        function showNotAnsweringDetails() {
+            var notAnsweringDetails = document.getElementById("notAnsweringDetails");
+            var radioValue = document.querySelector('input[name="notAnswering"]:checked').value;
+            notAnsweringDetails.style.display = radioValue === "yes" ? "block" : "none";
+        }
+
+        function generateLink() {
+            // Gather data from all forms
+            var areYouInterested = document.querySelector('input[name="areYouInterested"]:checked').value;
+            var prospect = document.querySelector('input[name="prospect"]:checked').value;
+            var futureProspect = document.querySelector('input[name="futureProspect"]:checked').value;
+            var notAnswering = document.querySelector('input[name="notAnswering"]:checked').value;
+
+            var feeConcern = document.getElementById("feeConcern")?.checked ?? false;
+            var parentsObligation = document.getElementById("parentsObligation")?.checked ?? false;
+            var notInterested = document.getElementById("notInterested")?.checked ?? false;
+            var switchedOff = document.getElementById("switchedOff")?.checked ?? false;
+            var notConnecting = document.getElementById("notConnecting")?.checked ?? false;
+            var notReachable = document.getElementById("notReachable")?.checked ?? false;
+            var languageProblem = document.getElementById("languageProblem")?.checked ?? false;
+
+            var remarks = document.getElementById("remarks").value;
+            var comments = document.getElementById("comments").value;
+            var followUp = document.getElementById("followUp").value;
+
+            
+        }
+    </script>
+
+</body>
+</html>
